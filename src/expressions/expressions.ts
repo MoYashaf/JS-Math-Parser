@@ -1,8 +1,8 @@
-import { Token, TokenKind } from "../tokens";
+import { TokenKind } from "../tokens";
 import { Expression } from "./expression";
 
 export class LiteralExpression implements Expression {
-  constructor(private literal: string) {}
+  constructor(private literal: string) { }
   print(): string {
     return `${this.literal}`;
   }
@@ -12,9 +12,9 @@ export class LiteralExpression implements Expression {
 }
 
 export class UnaryExpression implements Expression {
-  constructor(private op: TokenKind, private right: Expression) {}
+  constructor(private op: TokenKind, private right: Expression) { }
   print(): string {
-    return `${this.op}${this.right.print()}`;
+    return `${this.op}(${this.right.print()})`;
   }
   evaluate(): number {
     const r = this.right.evaluate();
@@ -33,7 +33,7 @@ export class BinaryExpression implements Expression {
     private left: Expression,
     private operator: TokenKind,
     private right: Expression
-  ) {}
+  ) { }
   print(): string {
     return `(${this.left.print()} ${this.operator} ${this.right.print()})`;
   }
@@ -46,9 +46,11 @@ export class BinaryExpression implements Expression {
       case TokenKind.MINUS:
         return l - r;
       case TokenKind.STAR:
-        // case TokenKind.OPEN_PAREN:
         return l * r;
       case TokenKind.SLASH:
+        if (r === 0) {
+          throw new Error("Cannot divide by zero (Math Error)")
+        }
         return l / r;
       case TokenKind.CARET:
         return Math.pow(l, r);

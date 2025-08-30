@@ -7,7 +7,7 @@ export enum TokenKind {
   STAR = "*",
   MINUS = "-",
   SLASH = "/",
-  EQUALS = "+",
+  EQUALS = "=",
   OPEN_PAREN = "(",
   CLOSE_PAREN = ")",
   CARET = "^",
