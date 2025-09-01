@@ -6,12 +6,17 @@ export class Lexer {
   private start: number;
   private current: number;
   private line: number;
+  private keywords: Record<string, TokenKind>;
   constructor(source: string) {
     this.source = source;
     this.tokens = new Array<Token>();
     this.start = 0;
     this.current = 0;
     this.line = 1;
+
+    this.keywords = {
+      pi: TokenKind.PI,
+    };
   }
 
   scanTokens(): Token[] {
@@ -28,8 +33,7 @@ export class Lexer {
   }
 
   private advance(): string {
-    let value = this.source.charAt(this.current++);
-    return value;
+    return this.source[this.current++]!;
   }
   private scanToken() {
     const c = this.advance();
@@ -84,8 +88,11 @@ export class Lexer {
     }
   }
   private number() {
-    while (this.isDigit(this.peek()) || this.isDot(this.peek())) {
+    while (this.isDigit(this.peek())) this.advance();
+    if (this.isDot(this.peek()) && this.isDigit(this.peekNext())) {
+      // Consume the "."
       this.advance();
+      while (this.isDigit(this.peek())) this.advance();
     }
     this.addTokenWithLiteral(
       TokenKind.NUMBER,
@@ -93,9 +100,11 @@ export class Lexer {
     );
   }
   private identifier() {
-    while (this.isAlphaNumeric(this.peek())) this.advance();
-    let text: string = this.source.slice(this.start, this.current);
-    this.addTokenWithLiteral(TokenKind.IDENT, text);
+    while (this.isAlpha(this.peek())) this.advance();
+    const text: string = this.source.slice(this.start, this.current);
+    let type: TokenKind = this.keywords[text]!;
+    if (type == undefined) type = TokenKind.IDENT;
+    this.addTokenWithLiteral(type, text);
   }
 
   private addTokenWithLiteral(kind: TokenKind, literal: any) {
@@ -122,9 +131,13 @@ export class Lexer {
   private isDot(c: string) {
     return ".".charCodeAt(0) == c.charCodeAt(0);
   }
-  private peek() {
+  private peek(): string {
     if (this.isAtEnd()) return "\0";
-    return this.source.charAt(this.current);
+    return this.source[this.current]!;
+  }
+  private peekNext() {
+    if (this.current + 1 >= this.source.length) return "\0";
+    return this.source[this.current + 1]!;
   }
   private isAlpha(expected: string): boolean {
     return (

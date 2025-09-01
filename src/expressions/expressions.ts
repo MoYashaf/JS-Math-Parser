@@ -7,6 +7,7 @@ export class LiteralExpression implements Expression {
     return `${this.literal}`;
   }
   evaluate(): number {
+    if (this.literal == "pi") return Math.PI;
     return parseFloat(this.literal);
   }
 }
