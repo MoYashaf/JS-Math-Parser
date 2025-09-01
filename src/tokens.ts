@@ -12,7 +12,8 @@ export enum TokenKind {
   CLOSE_PAREN = ")",
   CARET = "^",
   SQRT = "$",
-  PI = "pi"
+  PI = "pi",
+  E = "e",
 }
 
 export class Token {

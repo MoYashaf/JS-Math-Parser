@@ -16,6 +16,7 @@ export class Lexer {
 
     this.keywords = {
       pi: TokenKind.PI,
+      e: TokenKind.E,
     };
   }
 

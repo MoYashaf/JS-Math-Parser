@@ -2,18 +2,19 @@ import { TokenKind } from "../tokens";
 import { Expression } from "./expression";
 
 export class LiteralExpression implements Expression {
-  constructor(private literal: string) { }
+  constructor(private literal: string) {}
   print(): string {
     return `${this.literal}`;
   }
   evaluate(): number {
     if (this.literal == "pi") return Math.PI;
+    if (this.literal == "e") return Math.E;
     return parseFloat(this.literal);
   }
 }
 
 export class UnaryExpression implements Expression {
-  constructor(private op: TokenKind, private right: Expression) { }
+  constructor(private op: TokenKind, private right: Expression) {}
   print(): string {
     return `${this.op}(${this.right.print()})`;
   }
@@ -34,7 +35,7 @@ export class BinaryExpression implements Expression {
     private left: Expression,
     private operator: TokenKind,
     private right: Expression
-  ) { }
+  ) {}
   print(): string {
     return `(${this.left.print()} ${this.operator} ${this.right.print()})`;
   }
@@ -50,7 +51,7 @@ export class BinaryExpression implements Expression {
         return l * r;
       case TokenKind.SLASH:
         if (r === 0) {
-          throw new Error("Cannot divide by zero (Math Error)")
+          throw new Error("Cannot divide by zero (Math Error)");
         }
         return l / r;
       case TokenKind.CARET:

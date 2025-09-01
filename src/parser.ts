@@ -31,6 +31,7 @@ export class Parser {
       nextToken === TokenKind.IDENT ||
       nextToken === TokenKind.OPEN_PAREN ||
       nextToken === TokenKind.PI ||
+      nextToken === TokenKind.E ||
       nextToken === TokenKind.SQRT
     );
   }
@@ -51,16 +52,8 @@ export class Parser {
       case TokenKind.NUMBER:
       case TokenKind.IDENT:
       case TokenKind.PI:
-        // if (this.peek().kind == TokenKind.OPEN_PAREN) {
-        //   const rhs = this.parse(0);
-        //   lhs = new BinaryExpression(
-        //     new LiteralExpression(c.lexeme),
-        //     TokenKind.STAR,
-        //     rhs
-        //   );
-        // } else {
+      case TokenKind.E:
         lhs = new LiteralExpression(c.lexeme);
-        // }
         break;
       case TokenKind.MINUS:
       case TokenKind.SQRT:

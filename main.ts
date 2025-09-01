@@ -7,7 +7,7 @@ function repl() {
   let rl = createInterface({
     input: stdin,
     output: stdout,
-    prompt: "\x1b[32m" + "$" + "\x1b[0m" + " ",
+    prompt: `\x1b[32m$\x1b[0m `,
   });
 
   rl.prompt();
@@ -21,10 +21,7 @@ function repl() {
       const tokens = lexer.scanTokens();
       const parser = new Parser(tokens);
       const ast = parser.parse();
-      // console.log(tokens);
-      console.log(ast.print());
       console.log(ast.evaluate());
-      // console.log(ast);
     } catch (error) {
       console.error(`Error: ${(error as Error).message}`);
     }
